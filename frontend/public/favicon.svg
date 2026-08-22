@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Blue rounded square background -->
+  <rect width="64" height="64" rx="14" fill="#2563EB"/>
+  <!-- Airplane silhouette (white, rotated -45deg around center) -->
+  <g transform="translate(32,32) rotate(-45) translate(-32,-32)">
+    <!-- Main fuselage -->
+    <ellipse cx="32" cy="32" rx="5" ry="18" fill="white"/>
+    <!-- Wings -->
+    <polygon points="32,28 10,40 14,40 32,34" fill="white"/>
+    <polygon points="32,28 54,40 50,40 32,34" fill="white"/>
+    <!-- Tail fins -->
+    <polygon points="32,46 22,54 26,54 32,50" fill="white"/>
+    <polygon points="32,46 42,54 38,54 32,50" fill="white"/>
+    <!-- Nose -->
+    <ellipse cx="32" cy="15" rx="3.5" ry="5" fill="white"/>
+  </g>
+</svg>

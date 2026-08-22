@@ -1,0 +1,523 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+/* ============================================================
+   THEME TOKENS — Light (default) & Dark
+   ============================================================ */
+:root {
+  --bg-primary:      #f8f9fc;
+  --bg-secondary:    #ffffff;
+  --bg-card:         #ffffff;
+  --bg-card-hover:   #f1f5ff;
+  --bg-input:        #ffffff;
+  --bg-sidebar:      #f3f6fb;
+  --bg-nav:          #ffffff;
+
+  --border-base:     #e2e8f0;
+  --border-focus:    #3b82f6;
+  --border-strong:   #cbd5e1;
+
+  --text-primary:    #0f172a;
+  --text-secondary:  #334155;
+  --text-muted:      #64748b;
+  --text-inverse:    #ffffff;
+
+  --accent:          #2563eb;
+  --accent-light:    #dbeafe;
+  --accent-hover:    #1d4ed8;
+  --accent-text:     #1e40af;
+
+  --tag-green-bg:    #dcfce7;
+  --tag-green-text:  #15803d;
+  --tag-orange-bg:   #ffedd5;
+  --tag-orange-text: #c2410c;
+  --tag-purple-bg:   #ede9fe;
+  --tag-purple-text: #6d28d9;
+
+  --shadow-card:     0 1px 4px rgba(15,23,42,0.08), 0 4px 16px rgba(15,23,42,0.05);
+  --shadow-card-hover: 0 4px 12px rgba(37,99,235,0.12), 0 8px 32px rgba(15,23,42,0.10);
+  --shadow-modal:    0 8px 40px rgba(15,23,42,0.16);
+  --shadow-nav:      0 1px 0 #e2e8f0;
+
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   20px;
+  --radius-full: 9999px;
+
+  color-scheme: light;
+}
+
+.dark {
+  --bg-primary:      #0d1117;
+  --bg-secondary:    #161b22;
+  --bg-card:         #161b22;
+  --bg-card-hover:   #1c2333;
+  --bg-input:        #1c2333;
+  --bg-sidebar:      #161b22;
+  --bg-nav:          #0d1117;
+
+  --border-base:     #21262d;
+  --border-focus:    #58a6ff;
+  --border-strong:   #30363d;
+
+  --text-primary:    #f0f6fc;
+  --text-secondary:  #8b949e;
+  --text-muted:      #6e7681;
+  --text-inverse:    #0d1117;
+
+  --accent:          #2f81f7;
+  --accent-light:    #1f3356;
+  --accent-hover:    #1f6feb;
+  --accent-text:     #79c0ff;
+
+  --tag-green-bg:    #1a3327;
+  --tag-green-text:  #3fb950;
+  --tag-orange-bg:   #3a1e10;
+  --tag-orange-text: #f0883e;
+  --tag-purple-bg:   #2a1f4a;
+  --tag-purple-text: #a78bfa;
+
+  --shadow-card:     0 1px 4px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.3);
+  --shadow-card-hover: 0 4px 12px rgba(47,129,247,0.2), 0 8px 32px rgba(0,0,0,0.4);
+  --shadow-modal:    0 8px 40px rgba(0,0,0,0.6);
+  --shadow-nav:      0 1px 0 #21262d;
+
+  color-scheme: dark;
+}
+
+/* ============================================================
+   GLOBAL BASE
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+.font-serif-title {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-sans-ui {
+  font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   LAYOUT PANELS — replacing glassmorphism
+   ============================================================ */
+.glass-panel {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-base);
+  box-shadow: var(--shadow-card);
+  border-radius: var(--radius-xl);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.glass-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-base);
+  box-shadow: var(--shadow-card);
+  border-radius: var(--radius-lg);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.glass-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-card-hover);
+  background: var(--bg-card-hover);
+}
+
+/* ============================================================
+   INPUTS & FORM ELEMENTS
+   ============================================================ */
+.glass-input {
+  background: var(--bg-input);
+  border: 1.5px solid var(--border-base);
+  color: var(--text-primary);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-input::placeholder {
+  color: var(--text-muted);
+}
+
+.glass-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  outline: none;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn-glow {
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 13px;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28);
+}
+
+.btn-glow:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-glow:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+}
+
+/* Secondary / Ghost Buttons */
+.btn-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 13px;
+  border: 1.5px solid var(--border-base);
+  border-radius: var(--radius-md);
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   TAGS / BADGES
+   ============================================================ */
+.badge-blue {
+  background: var(--accent-light);
+  color: var(--accent-text);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+}
+
+.badge-green {
+  background: var(--tag-green-bg);
+  color: var(--tag-green-text);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+}
+
+.badge-orange {
+  background: var(--tag-orange-bg);
+  color: var(--tag-orange-text);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+}
+
+.badge-purple {
+  background: var(--tag-purple-bg);
+  color: var(--tag-purple-text);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+}
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+.navbar {
+  background: var(--bg-nav);
+  border-bottom: 1px solid var(--border-base);
+  box-shadow: var(--shadow-nav);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+/* ============================================================
+   DIVIDERS
+   ============================================================ */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border-base);
+  margin: 16px 0;
+}
+
+/* ============================================================
+   FLIGHT CARD SPECIFIC
+   ============================================================ */
+.flight-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-base);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  transition: all 0.22s ease;
+}
+
+.flight-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+.flight-card .price-accent {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+/* ============================================================
+   MODALS
+   ============================================================ */
+.modal-overlay {
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.modal-panel {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-modal);
+}
+
+/* ============================================================
+   SIDEBAR & FILTER PANEL
+   ============================================================ */
+.sidebar-panel {
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-xl);
+}
+
+/* ============================================================
+   CUSTOM SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* ============================================================
+   RANGE INPUT (Price Slider)
+   ============================================================ */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: var(--border-base);
+  border-radius: 4px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.3);
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.3s ease both;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.2s ease both;
+}
+
+/* Skeleton / loading shimmer */
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--border-base) 25%,
+    var(--bg-card-hover) 50%,
+    var(--border-base) 75%
+  );
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: var(--radius-md);
+}
+
+/* ============================================================
+   UTILITIES — replacing Tailwind arbitrary values
+   ============================================================ */
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.text-secondary { color: var(--text-secondary); }
+.text-muted     { color: var(--text-muted); }
+
+/* ============================================================
+   THEME TOGGLE BUTTON
+   ============================================================ */
+.theme-toggle {
+  width: 40px;
+  height: 22px;
+  border-radius: 11px;
+  background: var(--border-strong);
+  position: relative;
+  cursor: pointer;
+  border: none;
+  transition: background 0.25s ease;
+  display: flex;
+  align-items: center;
+  padding: 0 3px;
+}
+
+.theme-toggle.active {
+  background: var(--accent);
+}
+
+.theme-toggle::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  left: 3px;
+  transition: left 0.25s ease;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.theme-toggle.active::after {
+  left: calc(100% - 19px);
+}
+
+/* ============================================================
+   PRINT RULES (Boarding Pass)
+   ============================================================ */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 15mm;
+  }
+
+  body {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  #printable-ticket, #printable-ticket * {
+    visibility: visible !important;
+  }
+
+  #printable-ticket {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 24px !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 2px solid #2563eb !important;
+    border-radius: 16px !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+  }
+
+  #printable-ticket h3,
+  #printable-ticket h4,
+  #printable-ticket div,
+  #printable-ticket span {
+    color: #0f172a !important;
+  }
+
+  #printable-ticket .pnr-badge {
+    background: #dbeafe !important;
+    color: #1e40af !important;
+    border: 1px solid #2563eb !important;
+  }
+}
