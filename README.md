@@ -1,207 +1,152 @@
-# ✈️ Flight-Fare
+# ✈️ Flight-Fare — Full-Stack Flight Search, Fare Analytics & Booking Platform
 
-Flight-Fare is a full-stack flight booking application that allows users to search for flights, compare fares, select seats, make bookings, and receive their booking details digitally.
+A full-stack web application designed for comprehensive flight route searching, multi-tier fare analytics, interactive seat selection, OTP-based user authentication, and automated PDF boarding pass generation.
 
-The project was built using **React, Node.js, Express, and MongoDB**, with additional integrations for OTP verification, email delivery, weather information, and PDF ticket generation.
+---
 
-## Features
+## 📌 Project Overview
 
-* 🔎 Flight search and filtering
-* 💰 Flight fare comparison
-* 📊 Fare information and fare trends
-* 📅 7-day fare view
-* 🌦️ Destination weather information
-* 🔐 User authentication
-* 📱 OTP verification
-* 💺 Interactive seat selection
-* ✈️ Flight booking
-* 🎫 PNR generation
-* 📄 PDF boarding pass generation
-* 📧 Booking/ticket delivery through email
-* 📱 Responsive interface
-* 📋 Booking details and history
-* 🛡️ Validation and error handling
+**Flight-Fare** provides a streamlined flight discovery and booking workflow with realistic pricing analytics across domestic and international airport hubs. It combines an interactive React frontend with an Express.js REST API and MongoDB storage.
 
-## Tech Stack
+### Key Capabilities
+- **Airport & Route Search**: Real-time multi-city search with debounced autocomplete for major domestic and international airport hubs.
+- **7-Day Fare Analytics Matrix**: Visual price comparison heatmap across dates to easily spot lowest available fares.
+- **Flight Filtering & Sorting**: Multi-parameter filtering by price, stops (direct / 1-stop), airlines, and sorting by cheapest, fastest, or departure time.
+- **Destination Weather Context**: Live weather conditions and temperature indicators for arrival cities.
+- **Multi-Passenger Seat Selection**: Interactive aircraft seat map with live pricing and seat allocation per passenger.
+- **Authentication & Verification**: Phone SMS verification via Twilio and Email OTP via SMTP Nodemailer (with resilient demo mode fallbacks).
+- **Payment & Boarding Pass**: Checkout interface supporting Credit/Debit Cards, UPI/QR code, and Net Banking, followed by automated PDF boarding pass generation with airline branding and unique PNR codes.
 
-### Frontend
+---
 
-* React
-* Vite
-* Tailwind CSS
-* JavaScript
-* React Router
-* Axios
+## 🏗️ Architecture & Tech Stack
 
-### Backend
-
-* Node.js
-* Express.js
-* MongoDB
-* Mongoose
-* JWT
-* Nodemailer
-* Twilio
-
-### Other
-
-* PDF generation
-* Barcode generation
-* External flight/weather APIs
-
-## Project Structure
-
-```text
+```
 Flight-Fare/
-│
-├── frontend/
-│   ├── src/
-│   ├── public/
-│   └── package.json
-│
 ├── backend/
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   ├── middleware/
-│   ├── services/
-│   └── package.json
+│   ├── config/             # MongoDB database connection configuration
+│   ├── controllers/        # Flight search, booking, and auth controllers
+│   ├── data/               # Static airport hubs and flight generation data
+│   ├── models/             # Mongoose schemas (User, Booking, Otp)
+│   ├── routes/             # Express API route declarations
+│   ├── services/           # PDF ticket generation service (PDFKit)
+│   └── server.js           # Express API server entry point
 │
-├── .gitignore
-└── README.md
+└── frontend/
+    ├── public/             # Static assets, SVG icons, background artwork
+    ├── src/
+    │   ├── assets/         # App icons and media assets
+    │   ├── components/     # React modular UI components & modals
+    │   ├── services/       # Frontend API client and auth services
+    │   ├── App.jsx         # Root application layout & state orchestrator
+    │   ├── App.css         # Component utility styling
+    │   └── index.css       # Theme tokens, custom CSS variables, Tailwind
+    └── vite.config.js      # Vite build and proxy configuration
 ```
 
-## How It Works
+### Technology Breakdown
+- **Frontend**: React 19, Vite, Tailwind CSS v4, Lucide React Icons, jsPDF, html2canvas
+- **Backend**: Node.js (ES Modules), Express.js 4, Mongoose 9, Twilio SDK, Nodemailer, PDFKit
+- **Database**: MongoDB / MongoDB Atlas
 
-### 1. Search Flights
+---
 
-Users enter their:
+## 🚀 Getting Started & Local Setup
 
-* Departure city
-* Destination
-* Travel date
-* Number of passengers
+### Prerequisites
+- **Node.js** (v18.0.0 or higher recommended)
+- **npm** (v9.0.0 or higher)
+- **MongoDB** (Local instance or free MongoDB Atlas URI)
 
-The application retrieves available flight information and displays the available options.
+---
 
-### 2. Compare Fares
-
-Users can compare available flights based on fare, airline, timing, and other available flight information.
-
-### 3. Select Seats
-
-After selecting a flight, users can choose available seats through the interactive seat-selection interface.
-
-### 4. Complete Booking
-
-The booking process collects the required passenger information and confirms the selected flight and seats.
-
-### 5. Receive Booking Details
-
-After a successful booking, the application generates booking information including a PNR and boarding-pass PDF.
-
-The ticket can also be delivered through email.
-
-## Authentication
-
-The application uses authentication and OTP verification for account-related operations.
-
-Sensitive configuration values such as database credentials, API keys, and authentication secrets are stored using environment variables.
-
-## Environment Variables
-
-Create a `.env` file in the backend directory.
-
-Example:
-
-```env
-PORT=5000
-
-MONGODB_URI=
-
-JWT_SECRET=
-
-EMAIL_USER=
-EMAIL_PASSWORD=
-
-TWILIO_ACCOUNT_SID=
-TWILIO_AUTH_TOKEN=
-TWILIO_PHONE_NUMBER=
-
-FLIGHT_API_KEY=
-WEATHER_API_KEY=
-```
-
-Use your own credentials for the required services.
-
-**Do not commit the `.env` file to GitHub.**
-
-## Installation
-
-Clone the repository:
-
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/Pranay-k1408/Flight-Fare.git
 cd Flight-Fare
 ```
 
-### Backend
+---
 
+### 2. Backend Setup
 ```bash
 cd backend
 npm install
-npm run dev
 ```
 
-### Frontend
+Create a `.env` file in the `backend/` directory based on `.env.example`:
+```bash
+cp .env.example .env
+```
 
-Open another terminal:
+#### Environment Variables Configuration (`backend/.env`):
+| Variable | Description | Default / Example |
+| :--- | :--- | :--- |
+| `PORT` | Backend server port | `5000` |
+| `MONGODB_URI` | MongoDB connection string | `mongodb://127.0.0.1:27017/flightfare` |
+| `SMTP_HOST` | SMTP server hostname | `smtp.gmail.com` |
+| `SMTP_PORT` | SMTP port | `587` |
+| `SMTP_SECURE` | Use SSL/TLS (`true` / `false`) | `false` |
+| `SMTP_USER` | SMTP username / email address | `your_email@gmail.com` |
+| `SMTP_PASS` | SMTP application password | `your_app_password` |
+| `TWILIO_ACCOUNT_SID` | Twilio Account SID for SMS OTP | `your_twilio_account_sid` |
+| `TWILIO_AUTH_TOKEN` | Twilio Auth Token | `your_twilio_auth_token` |
+| `TWILIO_PHONE_NUMBER` | Twilio Phone Number | `your_twilio_phone_number` |
+| `TWILIO_VERIFY_SERVICE_SID` | Twilio Verify Service SID | `your_verify_service_sid` |
 
+Start the backend API server:
+```bash
+# Production start
+npm start
+
+# Development mode with watch
+npm run dev
+```
+Backend API will be running on `http://localhost:5000`.
+
+---
+
+### 3. Frontend Setup
+Open a new terminal window:
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
+Open your browser and navigate to `http://localhost:5173` (or the port specified in Vite output).
 
-The frontend will then be available through the Vite development server.
+---
 
-## API Overview
+## 📡 REST API Documentation
 
-The backend provides APIs for the main application functionality, including:
+### Flight & Search Endpoints (`/api/flights`)
 
-```text
-Authentication
-Flight search
-Fare information
-Bookings
-Seat selection
-User information
-OTP verification
-Weather information
-Ticket generation
-```
+| Method | Endpoint | Query / Body Params | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/flights/airports/search` | `?q=<query>` | Search airport hubs by city, name, or IATA code. |
+| `GET` | `/api/flights/search` | `?origin=DEL&destination=BOM&date=YYYY-MM-DD&passengers=1&cabinClass=Economy&sortBy=price` | Returns filtered flight listings, price metrics, and weather insights. |
+| `GET` | `/api/flights/fare-calendar` | `?origin=DEL&destination=BOM&startDate=YYYY-MM-DD&passengers=1` | Returns 7-day fare prediction calendar matrix. |
+| `GET` | `/api/flights/airlines` | — | Returns list of participating airlines with ratings. |
+| `POST` | `/api/flights/book` | `{ flight, passengers, pnr, totalAmount, currency, paymentMethod, email }` | Records booking, generates PDF ticket, and dispatches email. |
+| `GET` | `/api/flights/:id` | `id` (path param) | Returns aircraft seat layout and baggage allowance. |
 
-The exact endpoints and request formats can be found inside the backend route files.
+---
 
-## Future Improvements
+### Authentication Endpoints (`/api/auth`)
 
-Some improvements that could be added in future versions:
+| Method | Endpoint | Payload | Description |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/send-otp` | `{ recipient: "+919876543210", type: "phone" \| "email" }` | Dispatches 6-digit OTP via Twilio SMS or SMTP email. |
+| `POST` | `/api/auth/verify-otp` | `{ recipient: "+919876543210", otp: "123456", name: "User" }` | Validates verification code and registers/retrieves user profile. |
+| `POST` | `/api/auth/social-login` | `{ provider: "Google" \| "Apple", email: "user@example.com", name: "User" }` | Social login handler with token creation. |
 
-* Payment gateway integration
-* More flight providers
-* Improved fare prediction
-* Cancellation and refund processing
-* Admin dashboard
-* More detailed booking history
-* Improved notification system
-* Deployment with CI/CD
+---
 
-## License
-
-This project is licensed under the MIT License.
-
+## 🔒 Security & Best Practices
+- **Environment Isolation**: All sensitive credentials (`.env`) are strictly excluded from version control via `.gitignore`.
+- **Sanitized Fallbacks**: The application gracefully falls back to local data simulations and test SMTP services if external cloud services are offline or not configured.
 
 ---
 
 ## 📜 License
-MIT License © 2026 Skyward Global Inc.
+MIT License © 2026 Flight-Fare.
