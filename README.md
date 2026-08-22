@@ -183,21 +183,6 @@ Ticket generation
 
 The exact endpoints and request formats can be found inside the backend route files.
 
-## Screenshots
-
-Add screenshots of the main application pages here.
-
-Recommended screenshots:
-
-* Login/Register
-* Home/Search page
-* Flight results
-* Fare comparison
-* Seat selection
-* Passenger details
-* Booking confirmation
-* Generated boarding pass
-
 ## Future Improvements
 
 Some improvements that could be added in future versions:
