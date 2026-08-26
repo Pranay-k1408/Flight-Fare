@@ -65,18 +65,72 @@ export default function AuthModal({ onClose, onLoginSuccess }) {
     }
   };
 
-  // Trigger Google Sign-In
+  // Trigger Google Sign-In with real OAuth popup
   const handleGoogleClick = () => {
     const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    if (window.google?.accounts?.id && googleClientId && !googleClientId.includes('xxx')) {
+    
+    // 1. Try Google OAuth2 Token Client (opens official popup directly)
+    if (window.google?.accounts?.oauth2 && googleClientId) {
+      try {
+        const client = window.google.accounts.oauth2.initTokenClient({
+          client_id: googleClientId,
+          scope: 'email profile openid',
+          callback: async (tokenResponse) => {
+            if (tokenResponse?.access_token) {
+              setLoading(true);
+              setError('');
+              try {
+                // Fetch verified profile from Google's official userinfo endpoint
+                const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                  headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+                });
+                const googleProfile = await userInfoRes.json();
+                if (googleProfile?.email) {
+                  const res = await googleAuthApi({
+                    profile: {
+                      email: googleProfile.email,
+                      name: googleProfile.name || googleProfile.email.split('@')[0],
+                      avatar: googleProfile.picture || '',
+                      id: googleProfile.sub
+                    }
+                  });
+                  if (res?.user) {
+                    onLoginSuccess(res.user);
+                    onClose();
+                    return;
+                  }
+                }
+                throw new Error('Could not retrieve Google profile');
+              } catch (fetchErr) {
+                setError(fetchErr.message || 'Google authentication failed');
+              } finally {
+                setLoading(false);
+              }
+            }
+          },
+          error_callback: (err) => {
+            console.warn('Google OAuth popup error:', err);
+            setShowGoogleModal(true);
+          }
+        });
+        client.requestAccessToken({ prompt: 'select_account' });
+        return;
+      } catch (err) {
+        console.warn('Failed to launch Google Token Client:', err);
+      }
+    }
+
+    // 2. Fallback to Google ID One-Tap prompt
+    if (window.google?.accounts?.id && googleClientId) {
       window.google.accounts.id.prompt((notification) => {
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
           setShowGoogleModal(true);
         }
       });
-    } else {
-      setShowGoogleModal(true);
+      return;
     }
+
+    setShowGoogleModal(true);
   };
 
   // Trigger Apple Sign-In
