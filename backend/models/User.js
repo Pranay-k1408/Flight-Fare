@@ -23,6 +23,14 @@ const userSchema = new mongoose.Schema(
       enum: ['phone', 'email', 'google', 'apple'],
       default: 'phone'
     },
+    googleId: {
+      type: String,
+      sparse: true
+    },
+    appleId: {
+      type: String,
+      sparse: true
+    },
     isVerified: {
       type: Boolean,
       default: true

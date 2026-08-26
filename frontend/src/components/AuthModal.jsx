@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { X, ShieldCheck, Phone, Mail, ArrowRight, KeyRound, AlertCircle, User, LogIn } from 'lucide-react';
-import { sendOtpApi, verifyOtpApi, socialLoginApi } from '../services/authService';
+import React, { useState, useEffect } from 'react';
+import { X, ShieldCheck, Phone, Mail, ArrowRight, KeyRound, AlertCircle, User, LogIn, CheckCircle2 } from 'lucide-react';
+import { sendOtpApi, verifyOtpApi, googleAuthApi, appleAuthApi } from '../services/authService';
 
 export default function AuthModal({ onClose, onLoginSuccess }) {
   const [method, setMethod] = useState('phone'); // 'phone', 'email'
@@ -16,19 +16,98 @@ export default function AuthModal({ onClose, onLoginSuccess }) {
   const [showGoogleModal, setShowGoogleModal] = useState(false);
   const [googleEmail, setGoogleEmail] = useState('pranaykashyap8300@gmail.com');
   const [googleName, setGoogleName] = useState('Pranay Kashyap');
-  const [useCustomGoogle, setUseCustomGoogle] = useState(false);
 
   // Apple ID Sign-In modal view
   const [showAppleModal, setShowAppleModal] = useState(false);
   const [appleEmail, setAppleEmail] = useState('pranaykashyap8300@icloud.com');
   const [appleName, setAppleName] = useState('Pranay Kashyap');
-  const [useCustomApple, setUseCustomApple] = useState(false);
 
   // Feedback & Demo state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [demoOtp, setDemoOtp] = useState('');
   const [toastMessage, setToastMessage] = useState('');
+
+  // Initialize Google Identity Services if client ID is provided
+  useEffect(() => {
+    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    if (window.google?.accounts?.id && googleClientId && !googleClientId.includes('xxx')) {
+      try {
+        window.google.accounts.id.initialize({
+          client_id: googleClientId,
+          callback: handleGoogleCredentialResponse,
+          auto_select: false,
+          cancel_on_tap_outside: true
+        });
+      } catch (e) {
+        console.warn('Google Identity initialization notice:', e);
+      }
+    }
+  }, []);
+
+  // Handle Google Token from Official SDK
+  const handleGoogleCredentialResponse = async (response) => {
+    if (!response?.credential) return;
+    setLoading(true);
+    setError('');
+    try {
+      const res = await googleAuthApi({ credential: response.credential });
+      if (res?.user) {
+        onLoginSuccess(res.user);
+        onClose();
+      } else {
+        throw new Error('Could not authenticate with Google');
+      }
+    } catch (err) {
+      setError(err.message || 'Google authentication failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Trigger Google Sign-In
+  const handleGoogleClick = () => {
+    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    if (window.google?.accounts?.id && googleClientId && !googleClientId.includes('xxx')) {
+      window.google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          setShowGoogleModal(true);
+        }
+      });
+    } else {
+      setShowGoogleModal(true);
+    }
+  };
+
+  // Trigger Apple Sign-In
+  const handleAppleClick = async () => {
+    const appleClientId = import.meta.env.VITE_APPLE_CLIENT_ID;
+    if (window.AppleID?.auth && appleClientId && !appleClientId.includes('xxx')) {
+      try {
+        window.AppleID.auth.init({
+          clientId: appleClientId,
+          scope: 'name email',
+          redirectURI: window.location.origin,
+          usePopup: true
+        });
+        const response = await window.AppleID.auth.signIn();
+        setLoading(true);
+        const res = await appleAuthApi(response);
+        if (res?.user) {
+          onLoginSuccess(res.user);
+          onClose();
+        }
+      } catch (err) {
+        if (err?.error !== 'popup_closed_by_user') {
+          setError('Apple Sign-In was cancelled or encountered an error');
+        }
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setShowAppleModal(true);
+    }
+  };
 
   const handleSendOtp = async (e) => {
     e.preventDefault();
@@ -87,7 +166,7 @@ export default function AuthModal({ onClose, onLoginSuccess }) {
     setLoading(true);
     setError('');
     try {
-      const res = await socialLoginApi('Google', targetEmail, targetName);
+      const res = await googleAuthApi({ profile: { email: targetEmail, name: targetName } });
       if (res && res.user) {
         onLoginSuccess(res.user);
         setShowGoogleModal(false);
@@ -104,7 +183,7 @@ export default function AuthModal({ onClose, onLoginSuccess }) {
     setLoading(true);
     setError('');
     try {
-      const res = await socialLoginApi('Apple', targetEmail, targetName);
+      const res = await appleAuthApi({ profile: { email: targetEmail, name: targetName } });
       if (res && res.user) {
         onLoginSuccess(res.user);
         setShowAppleModal(false);
@@ -275,7 +354,7 @@ export default function AuthModal({ onClose, onLoginSuccess }) {
                 <div className="grid grid-cols-2 gap-2 mt-2">
                   <button
                     type="button"
-                    onClick={() => setShowGoogleModal(true)}
+                    onClick={handleGoogleClick}
                     className="py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all hover:opacity-90"
                     style={{ background: 'var(--bg-sidebar)', border: '1.5px solid var(--border-base)', color: 'var(--text-primary)' }}
                   >
@@ -289,7 +368,7 @@ export default function AuthModal({ onClose, onLoginSuccess }) {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setShowAppleModal(true)}
+                    onClick={handleAppleClick}
                     className="py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all hover:opacity-90"
                     style={{ background: 'var(--bg-sidebar)', border: '1.5px solid var(--border-base)', color: 'var(--text-primary)' }}
                   >
