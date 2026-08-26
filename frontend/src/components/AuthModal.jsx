@@ -30,7 +30,7 @@ export default function AuthModal({ onClose, onLoginSuccess }) {
 
   // Initialize Google Identity Services if client ID is provided
   useEffect(() => {
-    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '350407135969-mslv11vtvfsnsigj7qpjujkj7jovs8bm.apps.googleusercontent.com';
     if (window.google?.accounts?.id && googleClientId && !googleClientId.includes('xxx')) {
       try {
         window.google.accounts.id.initialize({
@@ -67,7 +67,7 @@ export default function AuthModal({ onClose, onLoginSuccess }) {
 
   // Trigger Google Sign-In with real OAuth popup
   const handleGoogleClick = () => {
-    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '350407135969-mslv11vtvfsnsigj7qpjujkj7jovs8bm.apps.googleusercontent.com';
     
     // 1. Try Google OAuth2 Token Client (opens official popup directly)
     if (window.google?.accounts?.oauth2 && googleClientId) {
