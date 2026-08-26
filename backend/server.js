@@ -20,6 +20,20 @@ app.use(express.json());
 app.use('/api/flights', flightRoutes);
 app.use('/api/auth', authRoutes);
 
+// Root Endpoint
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    service: 'Flight Fare Backend API',
+    message: 'Backend service is online and running successfully ✈️',
+    endpoints: {
+      health: '/api/health',
+      flights: '/api/flights',
+      auth: '/api/auth'
+    }
+  });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Flight Fare API service is online' });
 });
