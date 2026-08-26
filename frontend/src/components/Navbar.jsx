@@ -40,7 +40,7 @@ export default function Navbar({
 
   return (
     <header
-      className="w-full px-5 py-3.5 flex items-center justify-between z-30 relative navbar"
+      className="w-full px-3 sm:px-6 py-2.5 sm:py-3.5 flex items-center justify-between z-30 relative navbar"
       style={{
         background: 'var(--bg-nav)',
         borderBottom: '1px solid var(--border-base)',
@@ -50,18 +50,18 @@ export default function Navbar({
       }}
     >
       {/* Left — Brand */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
         <div
-          className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm flex-shrink-0"
+          className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center shadow-sm flex-shrink-0"
           style={{ background: 'var(--accent)' }}
         >
-          <Plane className="w-4.5 h-4.5 text-white transform -rotate-45" size={18} />
+          <Plane className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white transform -rotate-45" size={18} />
         </div>
         <div className="flex flex-col leading-tight">
-          <span className="font-bold text-base tracking-wide font-sans-ui" style={{ color: 'var(--text-primary)' }}>
-            Skyward <span style={{ color: 'var(--accent)', fontWeight: 400 }}>Global</span>
+          <span className="font-bold text-sm sm:text-base tracking-wide font-sans-ui whitespace-nowrap" style={{ color: 'var(--text-primary)' }}>
+            Skyward <span style={{ color: 'var(--accent)', fontWeight: 600 }}>Global</span>
           </span>
-          <span className="text-[10px] font-medium tracking-widest uppercase" style={{ color: 'var(--text-muted)' }}>
+          <span className="hidden sm:block text-[10px] font-medium tracking-widest uppercase" style={{ color: 'var(--text-muted)' }}>
             Flight Fare Engine
           </span>
         </div>
@@ -96,13 +96,13 @@ export default function Navbar({
       </nav>
 
       {/* Right — Controls */}
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
         {/* Custom Styled Currency Dropdown */}
         <div className="relative" ref={currencyRef}>
           <button
             type="button"
             onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
-            className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-all cursor-pointer"
+            className="h-8 sm:h-9 flex items-center gap-1.5 rounded-lg px-2 sm:px-2.5 text-xs font-semibold transition-all cursor-pointer whitespace-nowrap"
             style={{
               background: 'var(--bg-input)',
               border: '1.5px solid var(--border-base)',
@@ -111,13 +111,11 @@ export default function Navbar({
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; }}
             onMouseLeave={e => { if (!showCurrencyDropdown) e.currentTarget.style.borderColor = 'var(--border-base)'; }}
           >
-            <Globe className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
-            <span className="flex items-center gap-1">
-              <span>{activeCurrencyObj.flag}</span>
-              <span>{activeCurrencyObj.code} ({activeCurrencyObj.symbol})</span>
-            </span>
+            <span className="text-sm leading-none">{activeCurrencyObj.flag}</span>
+            <span className="font-bold text-[11px] sm:text-xs">{activeCurrencyObj.code}</span>
+            <span className="hidden sm:inline text-[11px]" style={{ color: 'var(--text-muted)' }}>({activeCurrencyObj.symbol})</span>
             <ChevronDown
-              className={`w-3.5 h-3.5 transition-transform duration-200 ${showCurrencyDropdown ? 'rotate-180' : ''}`}
+              className={`w-3 h-3 transition-transform duration-200 ${showCurrencyDropdown ? 'rotate-180' : ''}`}
               style={{ color: 'var(--text-muted)' }}
             />
           </button>
@@ -185,7 +183,7 @@ export default function Navbar({
         <button
           onClick={onToggleTheme}
           title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          className="w-9 h-9 rounded-lg flex items-center justify-center transition-all cursor-pointer"
+          className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center transition-all cursor-pointer flex-shrink-0"
           style={{
             background: 'var(--bg-input)',
             border: '1.5px solid var(--border-base)',
@@ -195,8 +193,8 @@ export default function Navbar({
           onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-base)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
         >
           {isDark
-            ? <Sun className="w-4 h-4" />
-            : <Moon className="w-4 h-4" />
+            ? <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            : <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           }
         </button>
 
@@ -204,13 +202,13 @@ export default function Navbar({
         {user ? (
           <button
             onClick={onOpenAccount}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all cursor-pointer"
+            className="h-8 sm:h-9 flex items-center gap-1.5 px-2 sm:px-3 rounded-lg transition-all cursor-pointer flex-shrink-0"
             style={{ background: 'var(--bg-input)', border: '1.5px solid var(--border-base)' }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-base)'; }}
           >
             <div
-              className="w-6 h-6 rounded-full font-bold text-[11px] flex items-center justify-center text-white flex-shrink-0"
+              className="w-5 h-5 sm:w-6 sm:h-6 rounded-full font-bold text-[10px] sm:text-[11px] flex items-center justify-center text-white flex-shrink-0"
               style={{ background: 'var(--accent)' }}
             >
               {(user.name || 'U').charAt(0).toUpperCase()}
@@ -222,7 +220,7 @@ export default function Navbar({
         ) : (
           <button
             onClick={onOpenAuth}
-            className="btn-glow flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold tracking-wide cursor-pointer"
+            className="btn-glow h-8 sm:h-9 flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 rounded-lg text-xs font-bold tracking-wide cursor-pointer flex-shrink-0 whitespace-nowrap"
           >
             <LogIn className="w-3.5 h-3.5" /> Sign In
           </button>
