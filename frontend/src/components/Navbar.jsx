@@ -1,5 +1,12 @@
-import React, { useState } from 'react';
-import { Globe, User, Compass, Plane, Bell, Ticket, LogIn, Sun, Moon } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Globe, User, Compass, Plane, Bell, Ticket, LogIn, Sun, Moon, ChevronDown, Check } from 'lucide-react';
+
+const CURRENCIES = [
+  { code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: '🇮🇳' },
+  { code: 'USD', symbol: '$', name: 'US Dollar', flag: '🇺🇸' },
+  { code: 'EUR', symbol: '€', name: 'Euro', flag: '🇪🇺' },
+  { code: 'GBP', symbol: '£', name: 'British Pound', flag: '🇬🇧' },
+];
 
 export default function Navbar({
   currency,
@@ -15,6 +22,21 @@ export default function Navbar({
   onOpenAuth
 }) {
   const [activeNav, setActiveNav] = useState('');
+  const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
+  const currencyRef = useRef(null);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (currencyRef.current && !currencyRef.current.contains(e.target)) {
+        setShowCurrencyDropdown(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const activeCurrencyObj = CURRENCIES.find(c => c.code === currency) || CURRENCIES[0];
 
   return (
     <header
@@ -75,23 +97,88 @@ export default function Navbar({
 
       {/* Right — Controls */}
       <div className="flex items-center gap-2.5">
-        {/* Currency */}
-        <div
-          className="flex items-center rounded-lg px-2.5 py-1.5 text-xs font-semibold"
-          style={{ background: 'var(--bg-input)', border: '1.5px solid var(--border-base)', color: 'var(--text-secondary)' }}
-        >
-          <Globe className="w-3.5 h-3.5 mr-1.5" style={{ color: 'var(--accent)' }} />
-          <select
-            value={currency}
-            onChange={(e) => setCurrency(e.target.value)}
-            className="outline-none cursor-pointer"
-            style={{ background: 'transparent', color: 'var(--text-primary)', border: 'none' }}
+        {/* Custom Styled Currency Dropdown */}
+        <div className="relative" ref={currencyRef}>
+          <button
+            type="button"
+            onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
+            className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-all cursor-pointer"
+            style={{
+              background: 'var(--bg-input)',
+              border: '1.5px solid var(--border-base)',
+              color: 'var(--text-primary)'
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; }}
+            onMouseLeave={e => { if (!showCurrencyDropdown) e.currentTarget.style.borderColor = 'var(--border-base)'; }}
           >
-            <option value="INR">INR (₹)</option>
-            <option value="USD">USD ($)</option>
-            <option value="EUR">EUR (€)</option>
-            <option value="GBP">GBP (£)</option>
-          </select>
+            <Globe className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
+            <span className="flex items-center gap-1">
+              <span>{activeCurrencyObj.flag}</span>
+              <span>{activeCurrencyObj.code} ({activeCurrencyObj.symbol})</span>
+            </span>
+            <ChevronDown
+              className={`w-3.5 h-3.5 transition-transform duration-200 ${showCurrencyDropdown ? 'rotate-180' : ''}`}
+              style={{ color: 'var(--text-muted)' }}
+            />
+          </button>
+
+          {/* Sleek Popover Menu */}
+          {showCurrencyDropdown && (
+            <div
+              className="absolute right-0 top-full mt-2 w-52 rounded-xl p-1.5 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150"
+              style={{
+                background: 'var(--bg-secondary)',
+                border: '1.5px solid var(--border-base)',
+                boxShadow: 'var(--shadow-popup)'
+              }}
+            >
+              <div
+                className="px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wider mb-1"
+                style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border-base)' }}
+              >
+                Select Display Currency
+              </div>
+              <div className="space-y-0.5">
+                {CURRENCIES.map((c) => {
+                  const isSelected = c.code === currency;
+                  return (
+                    <button
+                      key={c.code}
+                      type="button"
+                      onClick={() => {
+                        setCurrency(c.code);
+                        setShowCurrencyDropdown(false);
+                      }}
+                      className="w-full px-2.5 py-2 rounded-lg text-xs font-semibold flex items-center justify-between transition-all cursor-pointer"
+                      style={{
+                        background: isSelected ? 'var(--accent-light)' : 'transparent',
+                        color: isSelected ? 'var(--accent-text)' : 'var(--text-primary)',
+                      }}
+                      onMouseEnter={e => {
+                        if (!isSelected) e.currentTarget.style.background = 'var(--bg-card-hover)';
+                      }}
+                      onMouseLeave={e => {
+                        if (!isSelected) e.currentTarget.style.background = 'transparent';
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm">{c.flag}</span>
+                        <div className="text-left">
+                          <span className="font-bold">{c.code}</span>
+                          <span className="text-[11px] ml-1.5" style={{ color: 'var(--text-muted)' }}>
+                            {c.symbol} • {c.name}
+                          </span>
+                        </div>
+                      </div>
+                      {isSelected && (
+                        <Check className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Theme Toggle */}
