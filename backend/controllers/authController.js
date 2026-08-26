@@ -116,6 +116,7 @@ export const sendOtp = async (req, res) => {
 
   // ── Email via Nodemailer (email addresses) ────────────────────────────────
   if (recipient.includes('@') && transporter) {
+    try {
       const senderEmail = process.env.SMTP_USER || 'pranaykashyap8300@gmail.com';
       const info = await transporter.sendMail({
         from: `"Skyward Global" <${senderEmail}>`,
