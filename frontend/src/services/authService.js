@@ -1,4 +1,5 @@
-const API_BASE = '/api/auth';
+const API_ROOT = import.meta.env.VITE_API_URL || '';
+const API_BASE = `${API_ROOT}/api/auth`;
 
 export async function sendOtpApi(recipient, type = 'phone') {
   try {

@@ -1,4 +1,5 @@
-const API_BASE = '/api/flights';
+const API_ROOT = import.meta.env.VITE_API_URL || '';
+const API_BASE = `${API_ROOT}/api/flights`;
 
 const FALLBACK_AIRPORTS = [
   { code: 'DEL', name: 'Indira Gandhi International Airport', city: 'New Delhi', country: 'India', flag: '🇮🇳' },
