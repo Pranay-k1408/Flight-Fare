@@ -1,6 +1,14 @@
 # ✈️ Flight-Fare — Full-Stack Flight Search, Fare Analytics & Booking Platform
 
-A full-stack web application designed for comprehensive flight route searching, multi-tier fare analytics, interactive seat selection, OTP-based user authentication, and automated PDF boarding pass generation.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-blue?style=for-the-badge&logo=render)](https://flight-fare-xsyv.onrender.com)
+[![GitHub license](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](LICENSE)
+[![React](https://img.shields.io/badge/React%2019-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB%20Atlas-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+
+> 🚀 **Live Production Deployment**: [**https://flight-fare-xsyv.onrender.com**](https://flight-fare-xsyv.onrender.com)
+
+A full-stack web application designed for comprehensive flight route searching, multi-tier fare analytics, interactive seat selection, Google OAuth & OTP-based user authentication, and automated PDF boarding pass generation.
 
 ---
 
