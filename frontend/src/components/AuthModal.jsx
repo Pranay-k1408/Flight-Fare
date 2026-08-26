@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, ShieldCheck, Phone, Mail, ArrowRight, KeyRound, AlertCircle, User, LogIn, CheckCircle2 } from 'lucide-react';
-import { sendOtpApi, verifyOtpApi, googleAuthApi, appleAuthApi } from '../services/authService';
+import { sendOtpApi, verifyOtpApi, googleAuthApi } from '../services/authService';
 
 export default function AuthModal({ onClose, onLoginSuccess }) {
   const [method, setMethod] = useState('phone'); // 'phone', 'email'
@@ -119,36 +119,6 @@ export default function AuthModal({ onClose, onLoginSuccess }) {
     }
 
     setError('Google authentication SDK is loading. Please try again in a moment.');
-  };
-
-  // Trigger Apple Sign-In
-  const handleAppleClick = async () => {
-    const appleClientId = import.meta.env.VITE_APPLE_CLIENT_ID;
-    if (window.AppleID?.auth && appleClientId && !appleClientId.includes('xxx')) {
-      try {
-        window.AppleID.auth.init({
-          clientId: appleClientId,
-          scope: 'name email',
-          redirectURI: window.location.origin,
-          usePopup: true
-        });
-        const response = await window.AppleID.auth.signIn();
-        setLoading(true);
-        const res = await appleAuthApi(response);
-        if (res?.user) {
-          onLoginSuccess(res.user);
-          onClose();
-        }
-      } catch (err) {
-        if (err?.error !== 'popup_closed_by_user') {
-          setError('Apple Sign-In was cancelled or encountered an error');
-        }
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      setError('Apple Sign-In requires an Apple Developer Service ID to be configured.');
-    }
   };
 
   const handleSendOtp = async (e) => {
@@ -393,11 +363,11 @@ export default function AuthModal({ onClose, onLoginSuccess }) {
                   </span>
                   <div className="flex-grow border-t" style={{ borderColor: 'var(--border-base)' }} />
                 </div>
-                <div className="grid grid-cols-2 gap-2 mt-2">
+                <div className="mt-2">
                   <button
                     type="button"
                     onClick={handleGoogleClick}
-                    className="py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all hover:opacity-90"
+                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2.5 cursor-pointer transition-all hover:opacity-90 shadow-sm"
                     style={{ background: 'var(--bg-sidebar)', border: '1.5px solid var(--border-base)', color: 'var(--text-primary)' }}
                   >
                     <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
@@ -406,18 +376,7 @@ export default function AuthModal({ onClose, onLoginSuccess }) {
                       <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
                       <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
                     </svg>
-                    <span>Google</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleAppleClick}
-                    className="py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all hover:opacity-90"
-                    style={{ background: 'var(--bg-sidebar)', border: '1.5px solid var(--border-base)', color: 'var(--text-primary)' }}
-                  >
-                    <svg className="w-4 h-4 flex-shrink-0 fill-current" viewBox="0 0 170 170">
-                      <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.6-7.79-11.7-14.25-5.74-9.03-10.24-19.16-13.5-30.39-3.26-11.22-4.89-21.99-4.89-32.31 0-14.59 3.73-26.68 11.2-36.26 7.47-9.58 16.89-14.45 28.26-14.61 5.34 0 11.07 1.41 17.2 4.22 6.12 2.81 10.02 4.27 11.7 4.38 1.45 0 5.48-1.52 12.09-4.56 6.61-3.04 12.44-4.35 17.5-3.92 13.59.88 24.3 5.76 32.13 14.64-11.75 7.1-17.51 16.73-17.29 28.89.22 9.57 3.99 17.53 11.31 23.88 7.32 6.36 15.89 9.87 25.7 10.55-2.07 6.19-4.58 12.35-7.55 18.49zM119.22 31.84c0-7.39 2.67-14.29 8.01-20.7 5.34-6.41 11.88-10.45 19.62-12.14.76 3.04 1.14 5.92 1.14 8.64 0 7.39-2.73 14.39-8.19 21.01-5.46 6.62-12.18 10.66-20.16 12.12-.22-2.83-.42-5.81-.42-8.93z" />
-                    </svg>
-                    <span>Apple</span>
+                    <span>Continue with Google</span>
                   </button>
                 </div>
               </div>
