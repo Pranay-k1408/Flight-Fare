@@ -244,11 +244,14 @@ export const bookFlight = async (req, res) => {
         });
       }
 
+      const senderEmail = process.env.SMTP_USER || 'pranaykashyap8300@gmail.com';
+
       const mailInfo = await transporter.sendMail({
-        from: '"Skyward Global Flight Bookings" <bookings@skywardglobal.com>',
+        from: `"Skyward Global" <${senderEmail}>`,
+        replyTo: senderEmail,
         to: targetEmail,
         subject: `✈️ Confirmed Flight Ticket & PDF Boarding Pass (PNR: ${pnr})`,
-        text: `Dear Passenger,\n\nYour flight booking is CONFIRMED!\nPNR Reference: ${pnr}\nAirline: ${flight?.airline?.name || 'Vistara'}\nFlight Number: ${flight?.flightNumber || 'UK-815'}\nRoute: ${flight?.origin?.code || 'DEL'} to ${flight?.destination?.code || 'BOM'}\nPassengers Count: ${passengers.length}\n\nYour official PDF electronic ticket and boarding pass is attached to this email.\n\nThank you for choosing Skyward Global!`,
+        text: `Dear Passenger,\n\nYour flight booking is CONFIRMED!\nPNR Reference: ${pnr}\nAirline: ${flight?.airline?.name || 'Vistara'}\nFlight Number: ${flight?.flightNumber || 'UK-815'}\nRoute: ${flight?.origin?.code || flight?.origin || 'DEL'} to ${flight?.destination?.code || flight?.destination || 'BOM'}\nPassengers Count: ${passengers.length}\n\nYour official PDF electronic ticket and boarding pass is attached to this email.\n\nThank you for choosing Skyward Global!`,
         attachments: [
           {
             filename: `Flight_Ticket_${pnr}.pdf`,
