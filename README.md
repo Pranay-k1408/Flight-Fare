@@ -6,7 +6,6 @@
 [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB%20Atlas-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 
-> 🚀 **Live Production Deployment**: [**https://flight-fare-xsyv.onrender.com**](https://flight-fare-xsyv.onrender.com)
 
 A full-stack web application designed for comprehensive flight route searching, multi-tier fare analytics, interactive seat selection, Google OAuth & OTP-based user authentication, and automated PDF boarding pass generation.
 
